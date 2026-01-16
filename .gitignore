@@ -1,0 +1,6 @@
+# Rust
+/target
+
+# SQLite
+sales_app.*
+
