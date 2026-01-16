@@ -180,9 +180,11 @@ git push origin "v$VERSION"
 Push the build artifacts for the release.
 
 ```sh 
+gzip -kf target/release/sales_app-aarch64-apple-darwin
+gh release upload "$latest_tag" target/release/sales_app-aarch64-apple-darwin   --clobber
 
-gzip -kf target/release/libflow_dashboard.so
-gh release upload "$latest_tag" target/release/libflow_dashboard.so.gz   --clobber
+gzip -kf target/release/sales_app-x86_64-unknown-linux-gnu
+gh release upload "$latest_tag" target/release/sales_app-x86_64-unknown-linux-gnu   --clobber
 ```
 
 ## TODO
