@@ -162,29 +162,35 @@ Result will be:
 
 To create a new release, first bump the `Cargo.toml` version.
 
-Create a tag with:
-
-```sh 
-export VERSION=$( cargo metadata --no-deps --format-version 1 | jq -r '.packages[0].version')
-git tag "v$VERSION"
-git push origin "v$VERSION"
-```
-
-
-### Build
-
+Build the binaries:
 ```sh 
 /usr/bin/env bash ./cross_build.sh
 ```
 
-Push the build artifacts for the release.
+Create a tag with:
 
 ```sh 
-gzip -kf target/release/sales_app-aarch64-apple-darwin
-gh release upload "$latest_tag" target/release/sales_app-aarch64-apple-darwin   --clobber
+export VERSION=$( cargo metadata --no-deps --format-version 1 | jq -r '.packages[0].version')
+git add Cargo.toml
+git commit -m "bump version"
+git tag "v$VERSION"
+git push origin "v$VERSION"
+```
 
-gzip -kf target/release/sales_app-x86_64-unknown-linux-gnu
-gh release upload "$latest_tag" target/release/sales_app-x86_64-unknown-linux-gnu   --clobber
+Create a release:
+
+```sh 
+gh release create "$VERSION" -t "$VERSION" --notes "$VERSION"
+```
+
+as well as the build artifacts for the release:
+
+```sh 
+gzip -kf target/cross-builds/sales_app-aarch64-apple-darwin
+gh release upload "$VERSION" target/cross-builds/sales_app-aarch64-apple-darwin   --clobber
+
+gzip -kf target/cross-builds/sales_app-x86_64-unknown-linux-gnu
+gh release upload "$VERSION" target/cross-builds/sales_app-x86_64-unknown-linux-gnu   --clobber
 ```
 
 ## TODO
