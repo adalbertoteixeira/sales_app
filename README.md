@@ -24,7 +24,7 @@ Requires **SQLite**. On macOs / Linux SQLite is available using [HomeBrew](https
 
 ### Using releases
 
-Go to the release pages and download the latest version for your operating system.
+Go to the [release pages](https://github.com/adalbertoteixeira/sales_app/releases) and download the latest version for your operating system. For now only macOS and Linux available.
 
 Extract the file and run:
 
@@ -171,7 +171,7 @@ Create a tag with:
 
 ```sh 
 export VERSION=$( cargo metadata --no-deps --format-version 1 | jq -r '.packages[0].version')
-git add Cargo.toml
+git add Cargo.toml Cargo.lock
 git commit -m "bump version"
 git tag "v$VERSION"
 git push origin "v$VERSION"
