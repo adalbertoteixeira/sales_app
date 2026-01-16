@@ -34,17 +34,10 @@ build_with_cross() {
   (cd "$PROJECT_ROOT" && cross build --release --target="$target")
 
   # Copy artifacts to output directory
-  local ext
-  if [[ "$target" == *"linux"* ]]; then
-    ext="so"
-  else
-    ext="dylib"
-  fi
-
-  local artifact="$PROJECT_ROOT/target/$target/release/saless_app.$ext"
+  local artifact="$PROJECT_ROOT/target/$target/release/sales_app"
   if [[ -f "$artifact" ]]; then
-    cp "$artifact" "$OUTPUT_DIR/saless_app.$ext"
-    echo "Copied: saless_app.$ext"
+    cp "$artifact" "$OUTPUT_DIR/sales_app-$target"
+    echo "Copied: sales_app-$target"
   else
     echo "Warning: artifact not found at $artifact"
   fi
@@ -55,17 +48,10 @@ build_with_cargo() {
   echo "--- Building for $target with cargo ---"
   (cd "$PROJECT_ROOT" && cargo build --release --target="$target")
 
-  local ext
-  if [[ "$target" == *"linux"* ]]; then
-    ext="so"
-  else
-    ext="dylib"
-  fi
-
-  local artifact="$PROJECT_ROOT/target/$target/release/saless_app.$ext"
+  local artifact="$PROJECT_ROOT/target/$target/release/sales_app"
   if [[ -f "$artifact" ]]; then
-    cp "$artifact" "$OUTPUT_DIR/saless_app.$ext"
-    echo "Copied: saless_app.$ext"
+    cp "$artifact" "$OUTPUT_DIR/sales_app-$target"
+    echo "Copied: sales_app-$target"
   else
     echo "Warning: artifact not found at $artifact"
   fi
@@ -131,11 +117,6 @@ if "$BUILD_MACOS"; then
   if [[ "$(uname)" != "Darwin" ]]; then
     echo "Warning: macOS targets can only be built on macOS. Skipping."
   else
-    # Check if targets are installed
-    # if ! rustup target list --installed | grep -q "$MACOS_X86"; then
-    #   echo "Installing $MACOS_X86 target..."
-    #   rustup target add "$MACOS_X86"
-    # fi
     if ! rustup target list --installed | grep -q "$MACOS_ARM"; then
       echo "Installing $MACOS_ARM target..."
       rustup target add "$MACOS_ARM"

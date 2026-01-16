@@ -158,10 +158,31 @@ Result will be:
 ## Development
 
 
+### Create a new release
+
+To create a new release, first bump the `Cargo.toml` version.
+
+Create a tag with:
+
+```sh 
+export VERSION=$( cargo metadata --no-deps --format-version 1 | jq -r '.packages[0].version')
+git tag "v$VERSION"
+git push origin "v$VERSION"
+```
+
+
 ### Build
 
 ```sh 
 /usr/bin/env bash ./cross_build.sh
+```
+
+Push the build artifacts for the release.
+
+```sh 
+
+gzip -kf target/release/libflow_dashboard.so
+gh release upload "$latest_tag" target/release/libflow_dashboard.so.gz   --clobber
 ```
 
 ## TODO
@@ -179,6 +200,7 @@ Result will be:
 - [ ] add actual AI endpoint.
 - [ ] support for rich text messages in the payloads.
 - [ ] add deploy mechanism (taking).
+- [ ] add github actions build support for Windows binaries
 
 ### Code improvements
 - [ ] add tests.
