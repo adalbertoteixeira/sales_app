@@ -1,0 +1,39 @@
+### Generate Lead
+
+# @name createLead
+POST http://localhost:3010/lead HTTP/1.1
+Content-Type: application/json
+
+{ "name": "John Doe", "email": "john.doe@example.com" }
+
+### Send a message to the lead
+
+# @name sendMessage
+POST http://localhost:3010/send HTTP/1.1
+Content-Type: application/json
+
+{
+  "lead_id": {{createLead.response.body.id}},
+  "message": "Hi John! Open to quick chat to discuss an amazing business opportunity?"
+}
+
+### Mock the users reply
+
+# @name mockReply
+POST http://localhost:3010/reply HTTP/1.1
+Content-Type: application/json
+
+{ "message_id": {{sendMessage.response.body.id}}, "reply": "Interested!" }
+
+### Generate the AI reply
+
+# 
+POST http://localhost:3010/ai/reply HTTP/1.1
+Content-Type: application/json
+
+{ "message_id": {{sendMessage.response.body.id}} }
+
+### Get the history for the lead
+
+# curl http://localhost:3010/lead/1
+GET http://localhost:3010/lead/{{sendMessage.response.body.id}} HTTP/1.1
